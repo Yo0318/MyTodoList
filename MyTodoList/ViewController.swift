@@ -18,6 +18,11 @@ var todoList=[String]()
 @IBOutlet weak var tableView:UITableView!
 override func viewDidLoad(){
 super.viewDidLoad()
+    //保存しているToDoの読み込み処理
+    let userDefaults=UserDefaults.standard
+    if let storedTodoList=UserDefaults.array(forKey:"todoList")as?[String]{
+    todoList.append(contentsOf:storedTodoList)
+    }
 }
 
 //+ボタンをタップした時に呼ばれる処理
@@ -43,6 +48,10 @@ print(self.todoList)
 //テーブルに行が追加されたことをテーブルに通知
 self.tableView.insertRows(at:[IndexPath(row:0,section:0)],
 with:UITableView.RowAnimation.right)
+    //ToDoの保存処理
+    let userDefaults=UserDefaults.standard
+    userDefaults.set(self.todoList,forKey:"todoList")
+    userDefaults.synchronize()
 print("test3")
     }
     print("test4")
