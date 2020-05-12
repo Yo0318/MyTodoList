@@ -20,7 +20,7 @@ override func viewDidLoad(){
 super.viewDidLoad()
     //保存しているToDoの読み込み処理
     let userDefaults=UserDefaults.standard
-    if let storedTodoList=UserDefaults.array(forKey:"todoList")as?[String]{
+    if let storedTodoList=userDefaults.array(forKey:"todoList")as?[String]{
     todoList.append(contentsOf:storedTodoList)
     }
 }
