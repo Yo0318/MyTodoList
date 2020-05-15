@@ -10,7 +10,7 @@ import UIKit
 
 //UITableViewDataSource、UITableViewDelegateのプロトコルを実装する旨の宣言を行う
 class ViewController:UIViewController,UITableViewDataSource,UITableViewDelegate{
-
+    
 //ToDoを格納した配列
 
 var todoList=[String]()
@@ -24,6 +24,8 @@ super.viewDidLoad()
     todoList.append(contentsOf:storedTodoList)
     }
 }
+
+
 
 //+ボタンをタップした時に呼ばれる処理
 @IBAction func tapAddButton(_sender:Any){
@@ -84,5 +86,32 @@ present(alertController,animated:true,completion:nil)
     let todoTitle=todoList[indexPath.row] //セルのラベルにToDoのタイトルをセット
     cell.textLabel?.text=todoTitle
     return cell
+    }
+}
+//独自クラスをシリアライズする際には、NSObjectを継承し
+//NSSecureCodingプロトコルに準拠する必要がある
+
+class MyTodo:NSObject,NSSecureCoding{
+    static var supportsSecureCoding:Bool{
+        return true
+    }
+    
+    //ToDoのタイトル
+    var todoTitle:String?
+    //ToDoを完了したかどうかを表すフラグ
+    var todoDone:Bool=false
+    //コンストラクタ
+    override init(){
+    }
+    
+    //NSCodingプロトコルに宣言されているデシリアライズ処理。デコード処理とも呼ばれる
+    required init?(coder aDecoder:NSCoder){
+        todoTitle=aDecoder.decodeObject(forKey:"todoTitle")as?String
+        todoDone=aDecoder.decodeBool(forKey:"todoDone")
+    }
+    //NSCodingプロトコルに宣言されているシリアライズ処理。エンコード処理とも呼ばれる
+    func encode(with aCoder:NSCoder){
+        aCoder.encode(todoTitle,forKey:"todoTitle")
+        aCoder.encode(todoDone,forKey:"todoDone")
     }
 }
